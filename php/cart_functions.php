@@ -1,0 +1,4 @@
+addToCart()
+removeFromCart()
+updateCart()
+calculateCartTotal()

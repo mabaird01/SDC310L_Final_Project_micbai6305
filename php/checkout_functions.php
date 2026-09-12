@@ -1,0 +1,3 @@
+createOrder()
+calculateTotal()
+processCheckout()
