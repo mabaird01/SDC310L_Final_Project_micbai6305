@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 12, 2026 at 04:33 PM
+-- Generation Time: Sep 19, 2026 at 05:22 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -63,6 +63,22 @@ CREATE TABLE `products` (
   `image` varchar(255) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `products`
+--
+
+INSERT INTO `products` (`product_id`, `product_name`, `description`, `price`, `quantity_available`, `image`, `created_at`) VALUES
+(1, 'Laptop Pro 15', 'A powerful 15-inch laptop suitable for school, work, and everyday computing.', 899.99, 10, 'laptop.jpg', '2026-09-19 15:03:45'),
+(2, 'Wireless Keyboard', 'A compact wireless keyboard with a comfortable layout and long battery life.', 49.99, 25, 'keyboard.jpg', '2026-09-19 15:03:45'),
+(3, 'Wireless Mouse', 'An ergonomic wireless mouse designed for comfortable everyday use.', 29.99, 40, 'mouse.jpg', '2026-09-19 15:03:45'),
+(4, '27-inch Monitor', 'A high-resolution 27-inch monitor ideal for productivity, gaming, and entertainment.', 249.99, 15, 'monitor.jpg', '2026-09-19 15:03:45'),
+(5, 'Noise-Canceling Headphones', 'Over-ear wireless headphones with active noise cancellation and built-in microphone.', 149.99, 20, 'headphones.jpg', '2026-09-19 15:03:45'),
+(6, 'USB-C Hub', 'A multi-port USB-C hub with HDMI, USB, and SD card connectivity.', 39.99, 30, 'usb-hub.jpg', '2026-09-19 15:03:45'),
+(7, 'Mechanical Gaming Keyboard', 'A mechanical keyboard with responsive switches designed for gaming and productivity.', 89.99, 18, 'gaming-keyboard.jpg', '2026-09-19 15:03:45'),
+(8, 'Gaming Controller', 'A wireless gaming controller with ergonomic grips and responsive controls.', 59.99, 22, 'controller.jpg', '2026-09-19 15:03:45'),
+(9, 'Smartphone', 'A modern smartphone with a large display, high-quality camera, and all-day battery.', 699.99, 12, 'smartphone.jpg', '2026-09-19 15:03:45'),
+(10, 'Portable Bluetooth Speaker', 'A compact Bluetooth speaker providing portable wireless audio for home or travel.', 79.99, 35, 'speaker.jpg', '2026-09-19 15:03:45');
 
 -- --------------------------------------------------------
 
@@ -131,7 +147,7 @@ ALTER TABLE `order_items`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `users`
