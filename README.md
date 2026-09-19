@@ -380,18 +380,18 @@ User passwords will be stored as password hashes rather than plaintext passwords
 * [x] Design initial dark-mode storefront
 * [x] Design MySQL database schema
 * [x] Create MySQL database
-* [ ] Create product data
-* [ ] Connect PHP application to MySQL
-* [ ] Display products dynamically
+* [x] Create product data
+* [x] Connect PHP application to MySQL
+* [x] Display products dynamically
 
 ### Shopping Cart
 
-* [ ] Create product selection
-* [ ] Add products to cart
-* [ ] Display cart contents
-* [ ] Update quantities
-* [ ] Remove products
-* [ ] Calculate cart totals
+* [x] Create product selection
+* [x] Add products to cart
+* [x] Display cart contents
+* [x] Update quantities
+* [x] Remove products
+* [x] Calculate cart totals
 
 ### User Accounts
 
@@ -403,11 +403,11 @@ User passwords will be stored as password hashes rather than plaintext passwords
 
 ### Checkout
 
-* [ ] Create checkout page
-* [ ] Review order
-* [ ] Calculate final total
-* [ ] Create order
-* [ ] Create order items
+* [x] Create checkout page
+* [x] Review order
+* [x] Calculate final total
+* [x] Create order
+* [x] Create order items
 * [ ] Display confirmation
 
 ### MVC — Week 4
