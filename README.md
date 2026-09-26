@@ -2,11 +2,13 @@
 
 ## Project Overview
 
-DarkStore is a PHP-based online store application developed as a course project. The application allows users to browse products, select quantities, add products to a shopping cart, and complete the checkout process.
+DarkStore is a PHP/MySQL online store application developed as a course project. The application allows customers to browse products, select quantities, add products to a shopping cart, create an account, complete checkout, and view their order history.
 
-The project is being developed incrementally throughout the course. Each week introduces additional functionality based on the concepts covered in the course material. The final project will use PHP, MySQL, HTML, CSS, and JavaScript and will be submitted through GitHub.
+The application is built using PHP, MySQL, HTML, and CSS and follows a lightweight Model-View-Controller (MVC) architecture.
 
-The application is designed to have the look and feel of a modern online shopping website while maintaining a clean and organized code structure.
+The project was developed incrementally throughout the course, with functionality and architecture being added as new concepts were introduced.
+
+The application uses a dark-mode storefront design intended to provide a modern technology-focused shopping experience while maintaining a clean and organized code structure.
 
 ---
 
@@ -15,32 +17,46 @@ The application is designed to have the look and feel of a modern online shoppin
 The primary goals of the project are to:
 
 * Create a functional online shopping experience.
-* Allow users to browse available products.
-* Allow users to select product quantities.
-* Provide a shopping cart for selected products.
-* Allow users to review and modify their cart.
-* Provide a checkout process.
-* Store users, products, and order information in a MySQL database.
-* Use PHP for server-side application functionality.
-* Use JavaScript for client-side interaction.
-* Use HTML and CSS to create the storefront interface.
-* Transition the application to an MVC architecture during Week 4.
-* Develop the project incrementally throughout the course.
+* Allow customers to browse available products.
+* Display individual product information.
+* Allow customers to select product quantities.
+* Provide a session-based shopping cart.
+* Allow customers to update cart quantities.
+* Allow customers to remove products from the cart.
+* Calculate cart totals dynamically.
+* Provide customer registration and login.
+* Securely hash customer passwords.
+* Associate orders with customer accounts.
+* Support guest checkout.
+* Store users, products, orders, and order items in MySQL.
+* Use prepared SQL statements for database operations.
+* Validate user input on the server.
+* Use a lightweight MVC architecture.
+* Maintain existing application URLs while separating application responsibilities.
+* Provide a responsive dark-mode storefront.
 
 ---
 
 ## Technology Stack
 
-| Technology | Purpose                                       |
-| ---------- | --------------------------------------------- |
-| HTML5      | Webpage structure                             |
-| CSS3       | Styling and responsive design                 |
-| JavaScript | Client-side functionality                     |
-| PHP        | Server-side application logic                 |
-| MySQL      | Database management                           |
-| Git        | Version control                               |
-| GitHub     | Project repository and final submission       |
-| MVC        | Application architecture introduced in Week 4 |
+| Technology | Purpose                                          |
+| ---------- | ------------------------------------------------ |
+| HTML5      | Webpage structure                                |
+| CSS3       | Styling, dark-mode design, and responsive layout |
+| PHP        | Server-side application logic                    |
+| MySQL      | Database management                              |
+| PDO        | PHP/MySQL database connectivity                  |
+| Git        | Version control                                  |
+| GitHub     | Project repository and submission                |
+| MVC        | Application architecture                         |
+
+### JavaScript
+
+The project does not currently require JavaScript for its core functionality.
+
+An empty `js/script.js` file was previously included during the initial project structure, but it was removed because the current application does not depend on client-side JavaScript.
+
+Cart updates, checkout processing, authentication, and database operations are handled by PHP.
 
 ---
 
@@ -50,440 +66,266 @@ DarkStore uses a dark-mode visual design intended to resemble a modern technolog
 
 ### Design Characteristics
 
-* Dark charcoal and black background
+* Dark charcoal and black backgrounds
 * High-contrast white text
-* Blue accent color
+* Subtle gray borders
 * Responsive product cards
-* Navigation bar
-* Shopping cart indicator
-* Hero section
+* Responsive product grid
+* Dark-themed navigation bar
+* Product imagery
 * Featured products
-* Store feature section
-* Footer navigation
-* Mobile-responsive layout
+* Shopping cart interface
+* Checkout interface
+* Account and order-history pages
+* Responsive layouts for desktop, tablet, and mobile devices
+* Consistent buttons and navigation elements
 
-The initial storefront includes:
+The primary navigation includes:
 
-```text
 Home
 Products
 Cart
+Checkout
+My Account
 Login
 Register
-Checkout
-```
+Logout
 
-The design will be expanded as additional functionality is implemented.
 
----
-
-## Core Store Workflow
-
-The primary shopping workflow is:
-
-```text
-Browse Products
-       |
-       v
-Select Product
-       |
-       v
-Select Quantity
-       |
-       v
-Add to Cart
-       |
-       v
-Review Cart
-       |
-       +----> Update Quantity
-       |
-       +----> Remove Item
-       |
-       v
-Checkout
-       |
-       v
-Create Order
-       |
-       v
-Order Confirmation
-```
+The navigation changes based on the customer's authentication status.
 
 ---
 
-## Database Design
+## Application Architecture
 
-The application uses MySQL to store persistent application data.
+DarkStore uses a lightweight MVC architecture.
 
-The initial database consists of four primary tables:
+### Model
 
-```text
-users
-  |
-  | 1-to-many
-  v
-orders
-  |
-  | 1-to-many
-  v
-order_items
-  ^
-  |
-  | many-to-one
-  |
-products
-```
+Models are responsible for database-related operations.
 
-### Users
+Current models include:
 
-Stores customer account information.
+models/
+├── Product.php
+├── User.php
+├── Order.php
+└── OrderItem.php
 
-Suggested columns:
+Responsibilities include:
 
-```text
-user_id
-first_name
-last_name
-email
-password_hash
-created_at
-```
-
-`user_id` is the primary key.
+* Retrieving products
+* Retrieving users
+* Creating user accounts
+* Retrieving orders
+* Creating orders
+* Creating order items
+* Retrieving order history
+* Retrieving order details
 
 ---
 
-### Products
+### View
 
-Stores products available for purchase.
+Views are responsible for HTML presentation.
 
-Suggested columns:
+Current views include:
 
-```text
-product_id
-product_name
-description
-price
-quantity_available
-image
-created_at
-```
+views/
+├── layouts/
+│   ├── header.php
+│   └── footer.php
+│
+├── home/
+│   └── index.php
+│
+├── products/
+│   ├── index.php
+│   └── show.php
+│
+├── cart/
+│   └── index.php
+│
+├── checkout/
+│   ├── index.php
+│   └── confirmation.php
+│
+├── auth/
+│   ├── login.php
+│   └── register.php
+│
+└── account/
+    ├── index.php
+    └── order.php
 
-`product_id` is the primary key.
+
+Views are responsible for displaying information and should not contain database queries.
 
 ---
 
-### Orders
+### Controller
 
-Stores completed customer orders.
+Controllers coordinate application requests between models and views.
 
-Suggested columns:
+Current controllers include:
 
-```text
-order_id
-user_id
-order_date
-total
-```
+controllers/
+├── HomeController.php
+├── ProductController.php
+├── CartController.php
+├── CheckoutController.php
+├── OrderController.php
+├── AuthController.php
+└── AccountController.php
 
-`order_id` is the primary key.
+Controllers are responsible for application flow such as:
 
-`user_id` is a foreign key referencing `users.user_id`.
+* Loading products
+* Displaying product details
+* Preparing cart information
+* Processing checkout
+* Creating orders
+* Handling authentication
+* Displaying account information
+* Displaying order information
 
 ---
 
-### Order Items
+## Request Flow
 
-Stores the individual products contained within an order.
+The general application flow is:
 
-Suggested columns:
+Browser
+   |
+   v
+Root PHP Entry Point
+   |
+   v
+Controller
+   |
+   +----------> Model
+   |               |
+   |               v
+   |            MySQL
+   |               |
+   |               v
+   |            Model
+   |
+   v
+View
+   |
+   v
+Browser
 
-```text
-order_item_id
-order_id
-product_id
-quantity
-price
-```
 
-`order_item_id` is the primary key.
+The root PHP files preserve the application's existing URLs while forwarding requests to the appropriate controller.
 
-`order_id` is a foreign key referencing `orders.order_id`.
+For example:
 
-`product_id` is a foreign key referencing `products.product_id`.
+products.php
+     |
+     v
+ProductController
+     |
+     v
+Product Model
+     |
+     v
+products/index.php
 
-The `price` field records the product price at the time of purchase so that historical orders remain accurate if the product's price changes later.
+This allows the project to use MVC organization without requiring a complex routing framework.
 
 ---
 
 ## Project Structure
 
-The initial project structure is organized as follows:
+The current project structure is:
 
-```text
-OnlineStore/
-│
+final_project/
+
 ├── index.php
-│
 ├── products.php
 ├── product.php
 ├── cart.php
 ├── checkout.php
 ├── confirmation.php
 ├── login.php
-└── register.php
-│
+├── register.php
+├── account.php
+└── order.php
+
+├── controllers/
+│   ├── HomeController.php
+│   ├── ProductController.php
+│   ├── CartController.php
+│   ├── CheckoutController.php
+│   ├── OrderController.php
+│   ├── AuthController.php
+│   └── AccountController.php
+
+├── models/
+│   ├── Product.php
+│   ├── User.php
+│   ├── Order.php
+│   └── OrderItem.php
+
+├── views/
+│   ├── layouts/
+│   │   ├── header.php
+│   │   └── footer.php
+│   │
+│   ├── home/
+│   │   └── index.php
+│   │
+│   ├── products/
+│   │   ├── index.php
+│   │   └── show.php
+│   │
+│   ├── cart/
+│   │   └── index.php
+│   │
+│   ├── checkout/
+│   │   ├── index.php
+│   │   └── confirmation.php
+│   │
+│   ├── auth/
+│   │   ├── login.php
+│   │   └── register.php
+│   │
+│   └── account/
+│       ├── index.php
+│       └── order.php
+
 ├── css/
 │   └── style.css
-│
-├── js/
-│   └── script.js
-│
+
 ├── images/
-│   └── product images
-│
+│   ├── laptop.jpg
+│   ├── keyboard.jpg
+│   ├── mouse.jpg
+│   ├── monitor.jpg
+│   ├── headphones.jpg
+│   ├── usb-hub.jpg
+│   ├── gaming-keyboard.jpg
+│   ├── controller.jpg
+│   ├── smartphone.jpg
+│   └── speaker.jpg
+
 ├── php/
 │   ├── config.php
-│   ├── database.php
-│   ├── functions.php
-│   ├── cart_functions.php
-│   └── checkout_functions.php
-│
+│   └── database.php
+
 ├── api/
 │   ├── add_to_cart.php
 │   ├── update_cart.php
 │   ├── remove_from_cart.php
-│   └── checkout.php
-│
+│   ├── login.php
+│   ├── register.php
+│   └── logout.php
+
 ├── sql/
 │   └── database.sql
-│
+
 └── README.md
-```
 
-This structure is intended for the initial development stages. The project will be reorganized when MVC architecture is introduced.
-
----
-
-## Application Architecture
-
-Before MVC is introduced, the application will separate the major responsibilities of the project:
-
-### Front End
-
-HTML, CSS, and JavaScript will handle:
-
-* Page structure
-* Visual presentation
-* Product display
-* User interaction
-* Form validation
-* Cart interaction
-
-### PHP
-
-PHP will handle:
-
-* Server-side processing
-* Database communication
-* User authentication
-* Product retrieval
-* Cart processing
-* Checkout processing
-* Order creation
-
-### MySQL
-
-MySQL will handle persistent data including:
-
-* User accounts
-* Products
-* Orders
-* Order items
-
-The browser will not connect directly to MySQL.
-
-The general request flow is:
-
-```text
-Browser
-   |
-   v
-HTML / JavaScript
-   |
-   v
-PHP
-   |
-   v
-MySQL
-   |
-   v
-PHP
-   |
-   v
-Browser
-```
-
----
-
-## Shopping Cart
-
-The active shopping cart will initially be handled using PHP session data.
-
-Conceptually:
-
-```text
-$_SESSION['cart']
-```
-
-The cart will contain the products and quantities selected by the current customer.
-
-At checkout, the application will:
-
-1. Validate the cart.
-2. Validate product quantities.
-3. Calculate the order total.
-4. Create an order record.
-5. Create order item records.
-6. Complete the checkout process.
-7. Clear the shopping cart.
-
----
-
-## Security Considerations
-
-Security will be considered throughout development.
-
-Planned security practices include:
-
-* Password hashing using PHP password functions.
-* Prepared SQL statements.
-* Input validation.
-* Server-side validation.
-* Client-side validation where appropriate.
-* Session management.
-* Avoiding plaintext password storage.
-* Protecting database credentials.
-* Validating product quantities before checkout.
-* Preventing invalid database relationships through foreign keys.
-
-User passwords will be stored as password hashes rather than plaintext passwords.
-
----
-
-## Development Roadmap
-
-### Initial Development
-
-* [x] Establish project structure
-* [x] Design initial dark-mode storefront
-* [x] Design MySQL database schema
-* [x] Create MySQL database
-* [x] Create product data
-* [x] Connect PHP application to MySQL
-* [x] Display products dynamically
-
-### Shopping Cart
-
-* [x] Create product selection
-* [x] Add products to cart
-* [x] Display cart contents
-* [x] Update quantities
-* [x] Remove products
-* [x] Calculate cart totals
-
-### User Accounts
-
-* [ ] Create registration page
-* [ ] Create login page
-* [ ] Implement password hashing
-* [ ] Implement user sessions
-* [ ] Associate orders with users
-
-### Checkout
-
-* [x] Create checkout page
-* [x] Review order
-* [x] Calculate final total
-* [x] Create order
-* [x] Create order items
-* [ ] Display confirmation
-
-### MVC — Week 4
-
-The project will be reorganized into an MVC architecture as MVC concepts are introduced in the course.
-
-The planned MVC structure is:
-
-```text
-OnlineStore/
-│
-├── public/
-│   ├── index.php
-│   ├── css/
-│   ├── js/
-│   └── images/
-│
-├── app/
-│   ├── controllers/
-│   │   ├── ProductController.php
-│   │   ├── CartController.php
-│   │   └── CheckoutController.php
-│   │
-│   ├── models/
-│   │   ├── User.php
-│   │   ├── Product.php
-│   │   ├── Order.php
-│   │   └── OrderItem.php
-│   │
-│   └── views/
-│       ├── products/
-│       ├── cart/
-│       ├── checkout/
-│       └── account/
-│
-├── config/
-│   └── database.php
-│
-└── sql/
-    └── database.sql
-```
-
-The MVC structure will be developed when the course reaches that portion of the project.
-
----
-
-## Future Improvements
-
-Potential future enhancements include:
-
-* Product categories
-* Product search
-* Product filtering
-* Inventory management
-* Order history
-* User account management
-* Shipping information
-* Order status tracking
-* Improved mobile navigation
-* Product reviews
-* Additional storefront features
-
-These features will only be added if they fit the course requirements and project scope.
-
----
-
-## Author
-
-**Michael Baird**
-
-PHP Web Application Course Project
-
----
-
-## Project Status
-
-**Status:** In Development
-
-The application is being developed incrementally throughout the course. Features and architecture will be added as new course concepts are introduced.
+The project no longer uses the previous versions.

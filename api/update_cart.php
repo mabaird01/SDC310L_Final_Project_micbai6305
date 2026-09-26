@@ -2,120 +2,134 @@
 
 session_start();
 
-require_once "../php/database.php";
+require_once __DIR__ . "/../php/database.php";
 
 
-/*
- * Make sure the cart exists.
- */
-if (!isset($_SESSION['cart'])) {
-    $_SESSION['cart'] = [];
-}
+// --------------------------------------------------
+// Validate request method
+// --------------------------------------------------
 
-
-/*
- * Only accept POST requests.
- */
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header("Location: ../cart.php");
     exit;
 }
 
 
-/*
- * Validate product ID.
- */
-$product_id = filter_input(
+// --------------------------------------------------
+// Validate product ID
+// --------------------------------------------------
+
+$productId = filter_input(
     INPUT_POST,
     'product_id',
     FILTER_VALIDATE_INT
 );
 
-
-/*
- * Get requested action.
- */
-$action = $_POST['action'] ?? '';
-
-
-if (!$product_id) {
+if (!$productId || $productId <= 0) {
     header("Location: ../cart.php");
     exit;
 }
 
 
-/*
- * Make sure the product is currently in the cart.
- */
-if (!isset($_SESSION['cart'][$product_id])) {
+// --------------------------------------------------
+// Validate quantity
+// --------------------------------------------------
+
+$quantity = filter_input(
+    INPUT_POST,
+    'quantity',
+    FILTER_VALIDATE_INT
+);
+
+if ($quantity === false || $quantity === null) {
     header("Location: ../cart.php");
     exit;
 }
 
 
-/*
- * Increase quantity.
- */
-if ($action === 'increase') {
+// --------------------------------------------------
+// Make sure the product exists
+// --------------------------------------------------
 
-    $sql = "SELECT quantity_available
-            FROM products
-            WHERE product_id = :product_id";
+$sql = "SELECT
+            product_id,
+            quantity_available
+        FROM products
+        WHERE product_id = :product_id
+        LIMIT 1";
 
-    $stmt = $pdo->prepare($sql);
+$stmt = $pdo->prepare($sql);
 
-    $stmt->execute([
-        ':product_id' => $product_id
-    ]);
+$stmt->execute([
+    ':product_id' => $productId
+]);
 
-    $product = $stmt->fetch();
-
-
-    if ($product) {
-
-        $current_quantity =
-            $_SESSION['cart'][$product_id];
-
-        $available_quantity =
-            (int) $product['quantity_available'];
+$product = $stmt->fetch();
 
 
-        /*
-         * Do not allow the cart quantity
-         * to exceed inventory.
-         */
-        if ($current_quantity < $available_quantity) {
+// --------------------------------------------------
+// Product does not exist
+// --------------------------------------------------
 
-            $_SESSION['cart'][$product_id] =
-                $current_quantity + 1;
+if (!$product) {
 
-        }
+    if (isset($_SESSION['cart'][$productId])) {
+        unset($_SESSION['cart'][$productId]);
     }
+
+    header("Location: ../cart.php");
+    exit;
 }
 
 
-/*
- * Decrease quantity.
- */
-if ($action === 'decrease') {
+// --------------------------------------------------
+// Get available inventory
+// --------------------------------------------------
 
-    $_SESSION['cart'][$product_id]--;
+$availableQuantity =
+    (int) $product['quantity_available'];
 
 
-    /*
-     * Remove the product completely
-     * if its quantity reaches zero.
-     */
-    if ($_SESSION['cart'][$product_id] <= 0) {
+// --------------------------------------------------
+// Quantity of zero removes the item
+// --------------------------------------------------
 
-        unset($_SESSION['cart'][$product_id]);
+if ($quantity <= 0) {
 
-    }
+    unset($_SESSION['cart'][$productId]);
+
+    header("Location: ../cart.php");
+    exit;
 }
 
 
-/*
- * Return to the cart.
- */
+// --------------------------------------------------
+// Limit quantity to available inventory
+// --------------------------------------------------
+
+if ($quantity > $availableQuantity) {
+    $quantity = $availableQuantity;
+}
+
+
+// --------------------------------------------------
+// Update cart
+// --------------------------------------------------
+
+if ($quantity > 0) {
+
+    $_SESSION['cart'][$productId] = $quantity;
+
+} else {
+
+    unset($_SESSION['cart'][$productId]);
+}
+
+
+// --------------------------------------------------
+// Return to cart
+// --------------------------------------------------
+
 header("Location: ../cart.php");
+
 exit;

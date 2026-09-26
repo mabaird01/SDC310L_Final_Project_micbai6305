@@ -1,4 +1,0 @@
-addToCart()
-removeFromCart()
-updateCart()
-calculateCartTotal()
